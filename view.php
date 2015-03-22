@@ -36,9 +36,9 @@
     </aside>
     <?php endif ;?>
     <footer class="main-footer">
-      Créé par <a href="http://lamecarlate.net">Chaopale Lamecarlate</a>
+      <p>Créé par <a href="http://lamecarlate.net">Chaopale Lamecarlate</a></p>
+      <p><a href="https://github.com/Lamecarlate/republican-calendar">Forkez-moi sur Github</a>
     </footer>
   </div>
-  <script src="<?php echo ASSETS_URL; ?>/script.js"></script>
 </body>
 </html>
