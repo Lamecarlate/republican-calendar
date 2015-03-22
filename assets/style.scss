@@ -1,0 +1,108 @@
+/// =FUNCTIONS
+
+@function adapt-color-from-lightness($color) {
+  @while lightness($color) > 40 {
+    $color: adjust-lightness($color, -10);
+  }
+  @return $color;
+}
+
+/// =VARIABLES
+
+$seasons: (
+  'automne': ('color': #915a79, 'image': 'leavesandmoss100.jpg'),
+  'hiver': ('color': #f0f0f0, 'image': 'fluffy_fresh_snow_by_toysoldierthor-d33qe2z.jpg'),
+  'printemps': ('color': #97ba20, image: 'seamless_grass_texture_by_hhh316.jpg'),
+  'ete': ('color': #4289f1, 'image': 'bright_sky_2.jpg')
+);
+
+$white: #fff;
+
+/// =IMPORTS
+
+@import 'normalize';
+
+/// =GENERAL
+
+body {
+  background-color: $white;
+  font-family: "Palatino Linotype", Palatino, Palladio, "URW Palladio L", 
+  "Book Antiqua", Baskerville, "Bookman Old Style", "Bitstream Charter", 
+  "Nimbus Roman No9 L", Garamond, "Apple Garamond", "ITC Garamond Narrow", 
+  "New Century Schoolbook", "Century Schoolbook", "Century Schoolbook L", Georgia, serif;
+}
+
+.global {
+  max-width: 900px;
+  margin: 100px auto;
+  padding: 20px;
+  border: 5px solid $white;
+  background: $white;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+}
+
+/// =TITLE
+
+h1 {
+  &:before,
+  &:after {
+    display: inline-block;
+    content: '\2767';
+  }
+
+  &:before {
+    margin-right: 50px;
+    transform: scaleX(-1);
+  }
+
+  &:after {
+    margin-left: 50px;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+/// =VARIANTS
+@each $key, $value in $seasons {
+  .season--#{$key} {
+    $color: map-get($value, color);
+    $image: map-get($value, image);
+
+    background-color: map-get($value, color);
+    background-image: image-url(map-get($value, image));
+
+    .global {
+      border-color: map-get($value, color); 
+    }
+
+    a {
+      $a11y-color: adapt-color-from-lightness($color);
+      color: $a11y-color;
+
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
+
+      &:visited {
+        color: adjust-lightness($a11y-color, -10);
+      }
+    }
+  }
+}
+
+/// =FOOTER
+
+.main-footer {
+  margin-top: 25px;
+}
+
+.main-footer:before {
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 25px;
+  content: '\2042';
+}
