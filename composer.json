@@ -1,0 +1,6 @@
+{
+    "require": {
+        "popy/calendar": "dev-master",
+        "popy/republican-calendar": "dev-master"
+    }
+}
