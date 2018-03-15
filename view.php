@@ -11,7 +11,14 @@
     <header>
       <div>Calendrier républicain</div>
       <?php if(empty($error) || !$error->is_critical) : ?>
-      <p><?php echo $day['formatted'] ;?> &mdash; <?php echo $view->views_variables['day_number'] . ' ' . $view->views_variables['month'] ;?></p>
+      <p>
+        <?php echo $formatter->format($date) ;?>
+        &mdash;
+        <?php
+          // Syntaxe format alterbnatif : 'format des dates normales|format des sans culottides'
+          echo $republicanCalendar->format($date, 'l jS F Y|F, X, Y');
+        ?>
+      </p>
       <h1><?php echo $name ; ?></h1>
       <?php else : ?>
       <p class="h1-like">Erreur critique</p>

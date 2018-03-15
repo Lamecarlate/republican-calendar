@@ -16,29 +16,48 @@ define('DATA_PATH', BASE_PATH . DS . 'data');
 spl_autoload_register(function ($class) {
   include INC_PATH . DS . $class . '.class.php';
 });
+require_once 'vendor/autoload.php';
 
 // helpers
 include(INC_PATH . DS . 'helpers.php');
 
 $view = new View();
 
-$date = '';
-if(!empty($_GET) && !empty($_GET['month']) && !empty($_GET['day'])) {
-  $month = intval($_GET['month']);
-  $day = intval($_GET['day']);
-  $date = $_GET['month'] . '/' . $_GET['day'];
+// Builds date, either current date or by GET input
+$date = new DateTimeImmutable();
+if (isset($_GET['date']) && preg_match('/^\d\d\d\d-\d\d-\d\d$/', $_GET['date'])) {
+  $date = DateTimeImmutable::createFromFormat('Y-m-d', $_GET['date']);
 }
-$day = get_date($date);
 
-if($day) {
+$calendarFactory = new \Popy\RepublicanCalendar\Factory\CalendarFactory();
+$republicanCalendar = $calendarFactory->buildRepublican();
 
-  $republican_day = new Republican($day['month'], $day['day']);
+$formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::LONG);
+$formatter->setPattern('d MMMM');
 
-  $name = $republican_day->republican_day_name;
+if($date) {
+  $name =  $republicanCalendar->format($date, 'X');
 
-  $view->views_variables['day_number'] = $republican_day->republican_day_number;
-  $view->views_variables['month'] = $republican_day->republican_month;
-  $view->views_variables['season'] = $republican_day->republican_season;
+  $seasonMap = array(
+    'automne',
+    'automne',
+    'automne',
+    'hiver',
+    'hiver',
+    'hiver',
+    'printemps',
+    'printemps',
+    'printemps',
+    'ete',
+    'ete',
+    'ete',
+    'ete',
+  );
+
+  $view->views_variables['month'] = $republicanCalendar->format($date, 'F');
+  $view->views_variables['season'] = $seasonMap[
+    intval($republicanCalendar->format($date, 'm')) - 1
+  ];
 
   $local_image = MEDIA_PATH . DS . $name . '.jpg';
   if(!file_exists($local_image)) {
