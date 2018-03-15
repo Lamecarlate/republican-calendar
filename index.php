@@ -38,6 +38,27 @@ $formatter->setPattern('d MMMM');
 if($date) {
   $name =  $republicanCalendar->format($date, 'X');
 
+  $seasonMap = array(
+    'automne',
+    'automne',
+    'automne',
+    'hiver',
+    'hiver',
+    'hiver',
+    'printemps',
+    'printemps',
+    'printemps',
+    'ete',
+    'ete',
+    'ete',
+    'ete',
+  );
+
+  $view->views_variables['month'] = $republicanCalendar->format($date, 'F');
+  $view->views_variables['season'] = $seasonMap[
+    intval($republicanCalendar->format($date, 'm')) - 1
+  ];
+
   $local_image = MEDIA_PATH . DS . $name . '.jpg';
   if(!file_exists($local_image)) {
 
